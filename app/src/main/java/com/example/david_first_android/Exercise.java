@@ -6,24 +6,26 @@ public class Exercise {
     private int num1;
     private int num2;
     private int result;
+    private Interface inface;
 
-    public Exercise(){
-
+    public Exercise(Interface inface){
+        this.inface = inface;
     }
 
     public void generateLH(){
         Random r = new Random();
-        int num1 = r.nextInt(10);
-        int num2 = r.nextInt(10);
+        num1 = r.nextInt(10);
+        num2 = r.nextInt(10);
 
 
         result = num1 * num2;
+        inface.showNumbers(num1 , num2);
     }
 
     public void generateTo20(){
         Random r = new Random();
-        int num1 = r.nextInt(10);
-        int num2 = r.nextInt(9)+11;
+        num1 = r.nextInt(10);
+        num2 = r.nextInt(9)+11;
 
 
         result = num1 * num2;
@@ -31,8 +33,8 @@ public class Exercise {
 
     public void generateEtgar(){
         Random r = new Random();
-        int num1 = r.nextInt(10);
-        int num2 = r.nextInt(89)+11;
+        num1 = r.nextInt(10);
+        num2 = r.nextInt(89)+11;
 
 
         result = num1 * num2;
