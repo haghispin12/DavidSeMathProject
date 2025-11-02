@@ -1,5 +1,7 @@
 package com.example.david_first_android;
 
+import android.widget.Toast;
+
 import java.util.Random;
 
 public class Exercise {
@@ -29,6 +31,7 @@ public class Exercise {
 
 
         result = num1 * num2;
+        inface.showNumbers(num1 , num2);
     }
 
     public void generateEtgar(){
@@ -38,9 +41,18 @@ public class Exercise {
 
 
         result = num1 * num2;
+        inface.showNumbers(num1 , num2);
     }
 
+    public Boolean isCorrect(String input){
+        if ((result+ "").equals(input + "")){
+            return true;
+        }
+        else {
+            return false;
+        }
 
+    }
 
 
 
