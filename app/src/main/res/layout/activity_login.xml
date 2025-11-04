@@ -8,6 +8,9 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,6 +24,10 @@
           android:layout_height="100dp"
           android:layout_marginBottom="20dp"
           android:layout_marginTop="250dp"
+          android:hint="Enter username"
+          android:textSize="35dp"
+          android:gravity="center"
+          android:id="@+id/ET_Enter_username"
 
       />
 
@@ -28,6 +35,9 @@
         <Button
           android:layout_width="match_parent"
           android:layout_height="100dp"
+            android:text="SUBMIT"
+            android:textSize="40dp"
+            android:id="@+id/Btn_Submit"
 
         />
 
