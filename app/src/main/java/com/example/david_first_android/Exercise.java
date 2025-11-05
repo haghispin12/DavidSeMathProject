@@ -10,6 +10,7 @@ public class Exercise {
     private int result;
     private Interface inface;
 
+
     public Exercise(Interface inface){
         this.inface = inface;
     }
