@@ -1,6 +1,7 @@
 package com.example.david_first_android;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,9 +31,22 @@ public class Login extends AppCompatActivity {
         ET_Enter_username = findViewById(R.id.ET_Enter_username);
 
 
+        SharedPreferences sh = getSharedPreferences("SharedPref",MODE_PRIVATE);
+
+        String sh1 = sh.getString("username", "");
+        ET_Enter_username.setText(sh1);
+
+
         Btn_Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                SharedPreferences sh = getSharedPreferences("SharedPref",MODE_PRIVATE);
+                SharedPreferences.Editor myEdit = sh.edit();
+                myEdit.putString("username", ET_Enter_username.getText().toString());
+                myEdit.apply();
+
+
 
                 Intent intent = new Intent(Login.this,MainActivity.class);
                 intent.putExtra("UserName",ET_Enter_username.getText().toString());
