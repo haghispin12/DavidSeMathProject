@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ public class RateActivity extends AppCompatActivity {
 
     private Button Btn_Save;
     private SeekBar SB_seekbar;
+    private TextView TV_seekbarValue;
 
 
     @Override
@@ -26,6 +29,7 @@ public class RateActivity extends AppCompatActivity {
 
         Btn_Save = findViewById(R.id.Btn_SaveRate);
         SB_seekbar = findViewById(R.id.SB_seekbar);
+        TV_seekbarValue = findViewById(R.id.TV_seekbarValue);
 
         Btn_Save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +41,24 @@ public class RateActivity extends AppCompatActivity {
 
             }
         });
+
+        SB_seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                TV_seekbarValue.setText(String.valueOf(progress));
+
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
 
 
 
