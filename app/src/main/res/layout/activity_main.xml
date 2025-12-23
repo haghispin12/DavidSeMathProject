@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#7281D6"
+    android:id="@+id/frameLayout"
+    >
+
+<LinearLayout
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+
+    >
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="75dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:text="rate"
+            android:id="@+id/Btn_Rate"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:background="#000000"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_marginBottom="11dp"
+     >
+
+        <Button
+            android:background="@color/black"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="אתגר"
+            android:layout_margin="2dp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/Btn_Etgar"
+
+        />
+
+        <Button
+            android:background="@color/black"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="כפל עד 20"
+            android:layout_margin="2dp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/Btn_To20"
+
+            />
+
+        <Button
+            android:background="@color/black"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="לוח הכפל"
+            android:layout_margin="2dp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/Btn_LH"
+            />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+    >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#FFC107"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:textSize="35sp"
+            android:id="@+id/TV_1"
+            />
+
+        <TextView
+            android:background="#FFC107"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="X"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/TV_x"
+            />
+
+        <TextView
+            android:background="#FFC107"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:textSize="35sp"
+            android:id="@+id/TV_2"
+            />
+
+        <EditText
+            android:background="#FFC107"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:hint="תשובה"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/ET_Answer"
+        />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:background="@color/black"
+            android:text="בדיקה"
+            android:textSize="25sp"
+            android:id="@+id/Btn_Check"
+
+        />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_weight="0.5"
+        android:background="@color/black"
+        android:text="SAVE"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/Btn_Save"
+
+    />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+             android:layout_weight="0.5"
+        android:background="@color/black"
+        android:text="SHOW ALL USERS"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/Btn_ShowAllUsers"
+        />
+
+
+</LinearLayout>
+
+</FrameLayout>
