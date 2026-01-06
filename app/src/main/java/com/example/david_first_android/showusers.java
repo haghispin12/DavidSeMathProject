@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 
 public class showusers extends Fragment {
 
@@ -22,11 +24,14 @@ public class showusers extends Fragment {
     Button Btn_addPicture;
     ImageView ImgV_imageView;
     Button Btn_addUser;
+    User myUser;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
     }
 
@@ -42,6 +47,15 @@ public class showusers extends Fragment {
         ImgV_imageView = v.findViewById(R.id.ImgV_imageView);
         Btn_addUser = v.findViewById(R.id.Btn_addUser);
 
+        //משתנה בנדל שאוחז את הערכים שהתקבלו מהמיין אקטיביטי
+        String userStr = getArguments().getString("myUserJson");
+
+        Gson gson = new Gson();
+        myUser = gson.fromJson(userStr, User.class);
+
+        ET_user.setText(myUser.getUserName());
+        TV_score.setText("SCORE: " + String.valueOf(myUser.getScore()));
+        TV_rating.setText("RATING: " + String.valueOf(myUser.getRate()));
 
         return v;
     }

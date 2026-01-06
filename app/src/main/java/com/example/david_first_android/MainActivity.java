@@ -65,11 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                //האזנה לסגירה של אקטיביטי
                 @Override
+
                 public void onActivityResult(ActivityResult result) {
                     int myRate = result.getData().getIntExtra("RateKey", -1);
                     Toast.makeText(MainActivity.this, "your Rate: " + myRate, Toast.LENGTH_SHORT).show();
-
+                    //אני שם את הרייט שקיבלתי בתוך המשתנה MYUSER
+                    myUser.setRate(myRate);
 
                 }
             }
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this,"Welcome" + " " + UserName,Toast.LENGTH_SHORT).show();
 
-        User user = new User(UserName);
+        myUser = new User(UserName);
 
 
 
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if(ex.isCorrect(ET_Answer.getText()+ "")){
-                    user.setScore(LH,To20,Etgar);
+                    myUser.setScore(LH,To20,Etgar);
                 }
                 resetBooleans();
 
@@ -181,14 +184,22 @@ public class MainActivity extends AppCompatActivity {
         Btn_ShowAllUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showusers fragment = new showusers();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout, fragment, "anyTagName").commit();
-
+                //הופך לי את myuser לסטרינג באמצעות ג'ייסון
                 Gson gson = new Gson();
                 String json = gson.toJson(myUser);
 
+                //מכניס את הג'ייסון לתוך הבנדל בתור סטריגנ כי ג'ייסון הופך אובייקט לסטרינג
+                Bundle bundle = new Bundle();
+                bundle.putString("myUserJson", json);
 
+
+
+                showusers fragment = new showusers();
+                //מקשר את הבנדל לפרגמנט
+                fragment.setArguments(bundle);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frameLayout, fragment, "showusers").commit();
 
             }
         });
