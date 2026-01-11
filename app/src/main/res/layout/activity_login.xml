@@ -25,6 +25,7 @@
           android:layout_marginBottom="20dp"
           android:layout_marginTop="250dp"
           android:hint="Enter username"
+          android:textColor="@color/black"
           android:textSize="35dp"
           android:gravity="center"
           android:id="@+id/ET_Enter_username"
