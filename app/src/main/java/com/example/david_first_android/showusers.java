@@ -44,6 +44,7 @@ public class showusers extends Fragment {
                     if (result.getResultCode() == android.app.Activity.RESULT_OK) {
 
                         IV_imageView.setImageURI(uri);
+                        myUser.setUri(uri);
                     }
                 }
             });
@@ -64,6 +65,19 @@ public class showusers extends Fragment {
         activityResultLauncher.launch(cameraIntent);
 
     }
+
+    //פעולה שמוסיפה יוזר לטבלה של הDBHELPER ששומרת את כל השמתמשים
+    private void dbAddUser(){
+        DBHelper dbHelper = new DBHelper(getActivity());
+        long id = dbHelper.insert(myUser , getActivity());
+        if(id>0){
+            myUser.setId(id);
+        }
+    }
+
+
+
+
 
 
 
@@ -104,6 +118,13 @@ public class showusers extends Fragment {
             @Override
             public void onClick(View view) {
                 openCamera();
+            }
+        });
+
+        Btn_addUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbAddUser();
             }
         });
 
