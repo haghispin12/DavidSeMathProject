@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 import javax.xml.transform.Result;
 
 
@@ -36,6 +38,8 @@ public class showusers extends Fragment {
     Button Btn_addUser;
     User myUser;
     Uri uri;
+    ArrayList<User> arrayList;
+
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -75,7 +79,10 @@ public class showusers extends Fragment {
         }
     }
 
-
+    private void dbSelectUsers(){
+        DBHelper dbHelper = new DBHelper(getActivity());
+        arrayList = dbHelper.selectAll();
+    }
 
 
 
@@ -88,7 +95,8 @@ public class showusers extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        //שמה במערך שלי את המשתמש החדש שהוכנס ביחד עם פתיחת הפרגמנט
+        dbSelectUsers();
 
     }
 
@@ -114,6 +122,8 @@ public class showusers extends Fragment {
         TV_score.setText("SCORE: " + String.valueOf(myUser.getScore()));
         TV_rating.setText("RATING: " + String.valueOf(myUser.getRate()));
 
+
+
         Btn_addPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,6 +135,7 @@ public class showusers extends Fragment {
             @Override
             public void onClick(View view) {
                 dbAddUser();
+                dbSelectUsers();
             }
         });
 
