@@ -78,8 +78,8 @@
 
         </Button>
         <ImageView
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/ImgV_imageView"
             >
 
@@ -93,6 +93,16 @@
             android:id="@+id/Btn_addUser"
             >
         </Button>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcShowUsers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/activity_login"
+            />
+
+
 
     </LinearLayout>
 

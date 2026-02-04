@@ -78,7 +78,7 @@ public class showusers extends Fragment {
             myUser.setId(id);
         }
     }
-
+    //שליפת הערכים מהDB
     private void dbSelectUsers(){
         DBHelper dbHelper = new DBHelper(getActivity());
         arrayList = dbHelper.selectAll();
@@ -134,7 +134,9 @@ public class showusers extends Fragment {
         Btn_addUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //מוסיפה משתמש למערך הDB
                 dbAddUser();
+                //
                 dbSelectUsers();
             }
         });
