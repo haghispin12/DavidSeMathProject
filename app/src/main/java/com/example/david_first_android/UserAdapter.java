@@ -44,18 +44,23 @@ public class UserAdapter extends RecyclerView.Adapter< UserAdapter.MyViewHolder>
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView TV_username ;
+        TextView TV_score;
         ImageView IV_userImage;
 
-        // xml מבצע השמה של ערכי האוביקט עם הפקדים מה
+
+        // xmlמבצע השמה של ערכי האוביקט עם הפקדים מה
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             TV_username = itemView.findViewById(R.id. TV_username);
             IV_userImage = itemView.findViewById(R.id. IV_userImage);
+            TV_score = itemView.findViewById(R.id. TV_itemScore);
+
         }
 
         public void bind(final User item, final InterOnItemClick
                 interOnItemClick)      {
             TV_username.setText(item.getUserName());
+            TV_score.setText(item.getScore()+"");  //קרסתי פה, משהו עם ההשמה של הSCORE
             IV_userImage.setImageBitmap(item.getBitmap());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {

@@ -60,7 +60,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
@@ -97,7 +97,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcShowUsers"
-            android:layout_width="match_parent"
+            android:layout_width="350dp"
             android:layout_height="match_parent"
             tools:listitem="@layout/activity_login"
             />

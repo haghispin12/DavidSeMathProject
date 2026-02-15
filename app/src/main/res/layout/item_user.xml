@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="165dp"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
 
@@ -13,21 +13,23 @@
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:id="@+id/IV_userImage"
+
             >
         </ImageView>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
 
             >
 
             <TextView
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:id="@+id/TV_username"
                 android:text="hello"
+                android:textColor="@color/white"
                 android:textAlignment="center"
                 android:textSize="20dp"
                 android:layout_marginTop="25dp"
@@ -35,10 +37,11 @@
             </TextView>
 
             <TextView
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/TV_score"
+                android:id="@+id/TV_itemScore"
                 android:text="hello"
+                android:textColor="@color/white"
                 android:textSize="20dp"
                 android:textAlignment="center"
                 >

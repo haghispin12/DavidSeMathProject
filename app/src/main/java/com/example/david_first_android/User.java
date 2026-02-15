@@ -34,6 +34,7 @@ public class User {
         this.username = username;
     }
     public int getScore(){
+
         return this.score;
     }
     public void setScore(int score) {

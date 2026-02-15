@@ -109,9 +109,6 @@ public class showusers extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //שמה במערך שלי את המשתמש החדש שהוכנס ביחד עם פתיחת הפרגמנט
-
-
 
     }
 
@@ -157,7 +154,7 @@ public class showusers extends Fragment {
 
             }
         });
-
+    //שמה במערך שלי את המשתמש החדש שהוכנס ביחד עם פתיחת הפרגמנט
         dbSelectUsers();
 
         return v;
