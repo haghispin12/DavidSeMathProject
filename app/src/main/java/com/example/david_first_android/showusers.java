@@ -10,6 +10,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -39,6 +41,7 @@ public class showusers extends Fragment {
     User myUser;
     Uri uri;
     ArrayList<User> arrayList;
+    private RecyclerView RVusers;
 
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -82,9 +85,20 @@ public class showusers extends Fragment {
     private void dbSelectUsers(){
         DBHelper dbHelper = new DBHelper(getActivity());
         arrayList = dbHelper.selectAll();
+        showallusers(arrayList);
     }
 
+    private void showallusers(ArrayList<User> users) {
+        UserAdapter userAdapter = new UserAdapter(users, new InterOnItemClick() {
+            @Override
+            public void onItemClick(User item) {
 
+            }
+        });
+        RVusers.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RVusers.setAdapter(userAdapter);
+        RVusers.setHasFixedSize(true);
+    }
 
 
 
@@ -96,7 +110,8 @@ public class showusers extends Fragment {
         super.onCreate(savedInstanceState);
 
         //שמה במערך שלי את המשתמש החדש שהוכנס ביחד עם פתיחת הפרגמנט
-        dbSelectUsers();
+
+
 
     }
 
@@ -111,6 +126,7 @@ public class showusers extends Fragment {
         Btn_addPicture = v.findViewById(R.id.Btn_addPicture);
         IV_imageView = v.findViewById(R.id.ImgV_imageView);
         Btn_addUser = v.findViewById(R.id.Btn_addUser);
+        RVusers = v.findViewById(R.id.rcShowUsers);
 
         //משתנה בנדל שאוחז את הערכים שהתקבלו מהמיין אקטיביטי
         String userStr = getArguments().getString("myUserJson");
@@ -138,9 +154,11 @@ public class showusers extends Fragment {
                 dbAddUser();
                 //
                 dbSelectUsers();
+
             }
         });
 
+        dbSelectUsers();
 
         return v;
     }
