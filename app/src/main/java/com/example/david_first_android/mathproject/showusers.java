@@ -1,4 +1,4 @@
-package com.example.david_first_android;
+package com.example.david_first_android.mathproject;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -22,11 +22,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.david_first_android.R;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-
-import javax.xml.transform.Result;
 
 
 public class showusers extends Fragment {

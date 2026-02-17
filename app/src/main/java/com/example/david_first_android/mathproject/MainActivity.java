@@ -1,4 +1,4 @@
-package com.example.david_first_android;
+package com.example.david_first_android.mathproject;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,22 +7,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
+import com.example.david_first_android.R;
 import com.google.gson.Gson;
-
-import java.util.Queue;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 

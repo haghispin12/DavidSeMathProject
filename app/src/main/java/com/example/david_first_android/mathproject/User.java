@@ -1,4 +1,4 @@
-package com.example.david_first_android;
+package com.example.david_first_android.mathproject;
 
 import android.graphics.Bitmap;
 import android.net.Uri;

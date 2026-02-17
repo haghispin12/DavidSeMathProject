@@ -1,6 +1,4 @@
-package com.example.david_first_android;
-
-import android.widget.Toast;
+package com.example.david_first_android.mathproject;
 
 import java.util.Random;
 
