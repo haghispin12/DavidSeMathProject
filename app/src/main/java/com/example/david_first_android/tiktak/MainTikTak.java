@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.david_first_android.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainTikTak extends AppCompatActivity {
 
@@ -194,6 +195,9 @@ public class MainTikTak extends AppCompatActivity {
                 }
             }
         });
+
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        int n=0;
 
     }
 }
