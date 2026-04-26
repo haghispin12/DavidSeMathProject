@@ -34,6 +34,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -43,17 +46,28 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.firebase.firestore)
+
+    implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
+
+    implementation("com.google.firebase:firebase-analytics")
+
+    implementation("com.google.firebase:firebase-auth")
+    //implementation ("com.google.firebase:firebase-auth-ktx:20.0.1")
+    //implementation("com.google.firebaseui:firebase-ui-auth:8.0.0")
+
+
+    implementation("com.google.firebase:firebase-firestore")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.google.code.gson:gson:2.10.1")
-
-    implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
-    implementation("com.google.firebase:firebase-analytics")
-//implementation ("com.google.firebase:firebase-auth-ktx:20.0.1")
-    implementation("com.google.firebase:firebase-bom:34.9.0")
-    implementation("com.google.firebase:firebase-auth-ktx:23.2.1")
-
 }
+
+    //implementation("com.google.firebase:firebase-bom:34.9.0")
+    //implementation("com.google.firebase:firebase-auth-ktx:23.2.1")
+
