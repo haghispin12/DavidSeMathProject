@@ -57,6 +57,7 @@ dependencies {
 
 
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-database")
 
     implementation("com.google.code.gson:gson:2.10.1")
     implementation(libs.androidx.annotation)
