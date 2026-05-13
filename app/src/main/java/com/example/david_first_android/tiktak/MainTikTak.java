@@ -36,12 +36,14 @@ public class MainTikTak extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tik_tak);
 
+        //
         db = FirebaseDatabase.getInstance().getReference();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         TV_winner = findViewById(R.id.TV_winner);
         TV_turn = findViewById(R.id.TV_turn);
 
+        //חיבור הטיילים לID שלהם
         tile1_1 = new Tile(findViewById(R.id.tile1_1));
         tile1_2 = new Tile(findViewById(R.id.tile1_2));
         tile1_3 = new Tile(findViewById(R.id.tile1_3));
@@ -65,6 +67,7 @@ public class MainTikTak extends AppCompatActivity {
         tile3_3.getIv().setOnClickListener(v -> handleClick(8));
     }
 
+    // על משבצת בלוחהפעולה נקראת כל פעם שמתמש לוחץ
     private void handleClick(int index) {
         if (currentGame == null) return;
         if (currentGame.player2 == null) return;
@@ -74,12 +77,20 @@ public class MainTikTak extends AppCompatActivity {
         String symbol = uid.equals(currentGame.player1) ? "X" : "O";
         currentGame.board.set(index, symbol);
 
-        String nextTurn = uid.equals(currentGame.player1) ? currentGame.player2 : currentGame.player1;
+
+        String nextTurn;
+        if (uid.equals(currentGame.player1)) {
+            nextTurn = currentGame.player2;
+        } else {
+            nextTurn = currentGame.player1;
+        }
 
         db.child("games").child(gameId).child("board").setValue(currentGame.board);
         db.child("games").child(gameId).child("turn").setValue(nextTurn);
+
     }
 
+    //בודקת אם מישהו מנצח
     private boolean isWinner(List<String> board, String symbol) {
         // שורות
         if (board.get(0).equals(symbol) && board.get(1).equals(symbol) && board.get(2).equals(symbol)) return true;
@@ -95,6 +106,7 @@ public class MainTikTak extends AppCompatActivity {
         return false;
     }
 
+    //
     private void findOrCreateGame() {
         Log.d("TIKTAK", "findOrCreateGame נקרא");
 
@@ -136,11 +148,10 @@ public class MainTikTak extends AppCompatActivity {
                 String opponentSymbol = mySymbol.equals("X") ? "O" : "X";
 
                 if (isWinner(currentGame.board, mySymbol)) {
-                    TV_winner.setText("🎉 ניצחת!");
-                    TV_turn.setText("");
+                    updateWins();
+                    showEndGameFragment("🎉 ניצחת!");
                 } else if (isWinner(currentGame.board, opponentSymbol)) {
-                    TV_winner.setText("😔 הפסדת");
-                    TV_turn.setText("");
+                    showEndGameFragment("😔 הפסדת");
                 } else if (currentGame.player2 == null) {
                     TV_turn.setText("ממתין לשחקן שני...");
                 } else if (currentGame.turn.equals(uid)) {
@@ -155,6 +166,7 @@ public class MainTikTak extends AppCompatActivity {
                 Log.d("TIKTAK", "שגיאה: " + error.getMessage());
             }
         });
+
     }
 
     private void setTile(Tile tile, String value) {
@@ -184,4 +196,34 @@ public class MainTikTak extends AppCompatActivity {
         setTile(tile3_2, board.get(7));
         setTile(tile3_3, board.get(8));
     }
+
+
+    //בסוף המשחק מתווסף +1 לשדה נצחונות בפיירבייס עבור המשתמש הספציפי
+    private void updateWins() {
+        db.child("users").child(uid).child("wins")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        Long currentWins = snapshot.getValue(Long.class);
+                        long newWins = (currentWins == null ? 0 : currentWins) + 1;
+                        db.child("users").child(uid).child("wins").setValue(newWins);
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError error) {}
+                });
+    }
+
+    //מעבר לפרגמנט סיום המשחק
+    private void showEndGameFragment(String result) {
+        EndGameFragment fragment = EndGameFragment.newInstance(result);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(android.R.id.content, fragment)
+                .commit();
+    }
+
+
 }
+
+
+
