@@ -64,15 +64,55 @@ public class LoginActivity extends AppCompatActivity {
                         Boolean isOnline = snapshot.getValue(Boolean.class);
 
                         if (isOnline != null && isOnline) {
-                            Toast.makeText(LoginActivity.this,
-                                    "המשתמש הזה כבר מחובר!",
-                                    Toast.LENGTH_LONG).show();
-                            auth.signOut();
+                            // אם הוא כבר מסומן כאונליין, כנראה מדובר בבאג של משחק קודם שלא נסגר טוב.
+                            // אנחנו דורסים את זה, מסמנים אותו כאונליין ומכניסים אותו למשחק
+                            db.child("users").child(uid).child("online").setValue(true);
+                            db.child("users").child(uid).child("email").setValue(auth.getCurrentUser().getEmail());
+                            askForNickname();
                         } else {
                             db.child("users").child(uid).child("online").setValue(true);
                             db.child("users").child(uid).child("email").setValue(auth.getCurrentUser().getEmail());
+                            askForNickname();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {}
+                });
+    }
+
+    private void askForNickname() {
+        String uid = auth.getCurrentUser().getUid();
+
+        // בודקים אם יש כבר כינוי שמור
+        db.child("users").child(uid).child("nickname")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        String existingNickname = snapshot.getValue(String.class);
+
+                        if (existingNickname != null && !existingNickname.isEmpty()) {
+                            // יש כבר כינוי — עובר ישר למשחק
                             Intent intent = new Intent(LoginActivity.this, MainTikTak.class);
                             startActivity(intent);
+                        } else {
+                            // אין כינוי — מבקש מהמשתמש
+                            EditText ET_nickname = new EditText(LoginActivity.this);
+                            ET_nickname.setHint("בחר כינוי");
+
+                            new android.app.AlertDialog.Builder(LoginActivity.this)
+                                    .setTitle("איך לקרוא לך?")
+                                    .setView(ET_nickname)
+                                    .setPositiveButton("אישור", (dialog, which) -> {
+                                        String nickname = ET_nickname.getText().toString().trim();
+                                        if (!nickname.isEmpty()) {
+                                            db.child("users").child(uid).child("nickname").setValue(nickname);
+                                        }
+                                        Intent intent = new Intent(LoginActivity.this, MainTikTak.class);
+                                        startActivity(intent);
+                                    })
+                                    .setCancelable(false)
+                                    .show();
                         }
                     }
 

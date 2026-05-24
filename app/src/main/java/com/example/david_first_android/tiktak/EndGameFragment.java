@@ -1,7 +1,6 @@
 package com.example.david_first_android.tiktak;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,27 +32,23 @@ public class EndGameFragment extends Fragment {
     PlayerAdapter adapter;
     String result;
 
-    public static EndGameFragment newInstance(String result) {
-        EndGameFragment fragment = new EndGameFragment();
-        Bundle args = new Bundle();
-        args.putString("result", result);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    // בנאי דיפולטיבי (חובה בפרגמנטים)
+    public EndGameFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // שליפת הודעת התוצאה שהועברה מ-MainTikTak
         if (getArguments() != null) {
-            result = getArguments().getString("result");
+            result = getArguments().getString("result_message");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_end_game, container, false);
 
+        // חיבור רכיבי התצוגה
         TV_result = v.findViewById(R.id.TV_result);
         BTN_rematch = v.findViewById(R.id.BTN_rematch);
         RV_leaderboard = v.findViewById(R.id.RV_leaderboard);
@@ -61,25 +56,37 @@ public class EndGameFragment extends Fragment {
         db = FirebaseDatabase.getInstance().getReference();
         playerList = new ArrayList<>();
 
+        // הצגת תוצאת המשחק הנוכחי
         TV_result.setText(result);
 
+        // הגדרת ה-RecyclerView עבור טבלת המובילים
         adapter = new PlayerAdapter(playerList);
         RV_leaderboard.setLayoutManager(new LinearLayoutManager(getActivity()));
         RV_leaderboard.setAdapter(adapter);
         RV_leaderboard.setHasFixedSize(true);
 
+        // טעינת המשתמשים והניצחונות מה-Database
         loadLeaderboard();
 
+        // מאזין לכפתור משחק חוזר - מאפס את מסך המשחק לחלוטין
         BTN_rematch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // נמשיך בשלב הבא
+                if (getActivity() != null) {
+                    android.content.Intent intent = getActivity().getIntent();
+                    getActivity().finish(); // סוגר את המסך הישן והפרגמנט איתו
+                    startActivity(intent);  // פותח מסך משחק חדש ונקי
+                }
             }
         });
 
         return v;
     }
 
+    /**
+     * שולפת את כל המשתמשים מ-Firebase,
+     * ממירה אותם לכינויים (Nicknames) וממיינת לפי כמות ניצחונות מהגבוה לנמוך.
+     */
     private void loadLeaderboard() {
         db.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -87,14 +94,18 @@ public class EndGameFragment extends Fragment {
                 playerList.clear();
 
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    String email = userSnapshot.child("email").getValue(String.class);
+                    // שליפת הכינוי והניצחונות של המשתמש (במקום מייל)
+                    String nickname = userSnapshot.child("nickname").getValue(String.class);
                     Long wins = userSnapshot.child("wins").getValue(Long.class);
 
-                    if (email != null) {
-                        playerList.add(new PlayerItem(email, wins == null ? 0 : wins));
+                    if (nickname == null || nickname.trim().isEmpty()) {
+                        nickname = "שחקן אלמוני"; // הגנה למקרה שאין כינוי
                     }
+
+                    playerList.add(new PlayerItem(nickname, wins == null ? 0 : wins));
                 }
 
+                // מיון הרשימה בסדר יורד (מהניצחונות הגבוהים לנמוכים)
                 Collections.sort(playerList, new Comparator<PlayerItem>() {
                     @Override
                     public int compare(PlayerItem a, PlayerItem b) {
@@ -102,6 +113,7 @@ public class EndGameFragment extends Fragment {
                     }
                 });
 
+                // עדכון התצוגה בטבלה
                 adapter.notifyDataSetChanged();
             }
 
