@@ -20,27 +20,36 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class EndGameFragment extends Fragment {
 
+    // רכיבי תצוגה
     TextView TV_result;
     Button BTN_rematch;
-    RecyclerView RV_leaderboard;
+    RecyclerView RV_current_game, RV_global_leaderboard;
+
+    // רשימות ואדפטרים נפרדים לשתי הטבלאות
+    ArrayList<PlayerItem> globalList;
+    ArrayList<PlayerItem> currentMatchList;
+    PlayerAdapter globalAdapter;
+    PlayerAdapter currentMatchAdapter;
+
     DatabaseReference db;
-    ArrayList<PlayerItem> playerList;
-    PlayerAdapter adapter;
     String result;
 
-    // בנאי דיפולטיבי (חובה בפרגמנטים)
+    // מזהי השחקנים במשחק הנוכחי
+    String p1Uid, p2Uid;
+
     public EndGameFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // שליפת הודעת התוצאה שהועברה מ-MainTikTak
+        // שליפת הנתונים שהועברו ממסך המשחק
         if (getArguments() != null) {
             result = getArguments().getString("result_message");
+            p1Uid = getArguments().getString("player1_uid");
+            p2Uid = getArguments().getString("player2_uid");
         }
     }
 
@@ -48,35 +57,46 @@ public class EndGameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_end_game, container, false);
 
-        // חיבור רכיבי התצוגה
+        // חיבור רכיבי טקסט וכפתור מה-XML
         TV_result = v.findViewById(R.id.TV_result);
         BTN_rematch = v.findViewById(R.id.BTN_rematch);
-        RV_leaderboard = v.findViewById(R.id.RV_leaderboard);
-
-        db = FirebaseDatabase.getInstance().getReference();
-        playerList = new ArrayList<>();
-
-        // הצגת תוצאת המשחק הנוכחי
         TV_result.setText(result);
 
-        // הגדרת ה-RecyclerView עבור טבלת המובילים
-        adapter = new PlayerAdapter(playerList);
-        RV_leaderboard.setLayoutManager(new LinearLayoutManager(getActivity()));
-        RV_leaderboard.setAdapter(adapter);
-        RV_leaderboard.setHasFixedSize(true);
+        // חיבור שני ה-RecyclerViews מה-XML החדש
+        RV_current_game = v.findViewById(R.id.RV_current_game);
+        RV_global_leaderboard = v.findViewById(R.id.RV_global_leaderboard);
 
-        // טעינת המשתמשים והניצחונות מה-Database
-        loadLeaderboard();
+        db = FirebaseDatabase.getInstance().getReference();
 
-        // מאזין לכפתור משחק חוזר - מאפס את מסך המשחק לחלוטין
-        BTN_rematch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getActivity() != null) {
-                    android.content.Intent intent = getActivity().getIntent();
-                    getActivity().finish(); // סוגר את המסך הישן והפרגמנט איתו
-                    startActivity(intent);  // פותח מסך משחק חדש ונקי
-                }
+        // אתחול רשימות ואדפטרים (שימוש חוזר באדפטר הקיים)
+        globalList = new ArrayList<>();
+        currentMatchList = new ArrayList<>();
+
+        globalAdapter = new PlayerAdapter(globalList);
+        currentMatchAdapter = new PlayerAdapter(currentMatchList);
+
+        // הגדרת לוח עולמי
+        RV_global_leaderboard.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RV_global_leaderboard.setAdapter(globalAdapter);
+
+        // הגדרת לוח ראש בראש
+        RV_current_game.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RV_current_game.setAdapter(currentMatchAdapter);
+
+        // טעינת הנתונים מהשרת
+        loadLeaderboards();
+
+        // מאזין לכפתור משחק חוזר - מאפס את האקטיביטי
+        BTN_rematch.setOnClickListener(view -> {
+            if (getActivity() != null) {
+                // יוצרים Intent חדש לגמרי, לא משכפלים את הקיים
+                android.content.Intent intent = new android.content.Intent(getActivity(), MainTikTak.class);
+
+                // מנקים את כל הסטאק של האקטיביטיז הקודמים כדי שמשחק חוזר יהיה "נקי"
+                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                getActivity().finish();
+                startActivity(intent);
             }
         });
 
@@ -84,37 +104,42 @@ public class EndGameFragment extends Fragment {
     }
 
     /**
-     * שולפת את כל המשתמשים מ-Firebase,
-     * ממירה אותם לכינויים (Nicknames) וממיינת לפי כמות ניצחונות מהגבוה לנמוך.
+     * שולפת את כל המשתמשים מ-Firebase ומפצלת אותם לשתי הטבלאות
      */
-    private void loadLeaderboard() {
+    private void loadLeaderboards() {
         db.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                playerList.clear();
+                globalList.clear();
+                currentMatchList.clear();
 
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    // שליפת הכינוי והניצחונות של המשתמש (במקום מייל)
+                    String userKey = userSnapshot.getKey();
                     String nickname = userSnapshot.child("nickname").getValue(String.class);
                     Long wins = userSnapshot.child("wins").getValue(Long.class);
 
                     if (nickname == null || nickname.trim().isEmpty()) {
-                        nickname = "שחקן אלמוני"; // הגנה למקרה שאין כינוי
+                        nickname = "שחקן אלמוני";
                     }
 
-                    playerList.add(new PlayerItem(nickname, wins == null ? 0 : wins));
+                    PlayerItem player = new PlayerItem(nickname, wins == null ? 0 : wins);
+
+                    // 1. הוספה קבועה לרשימה העולמית
+                    globalList.add(player);
+
+                    // 2. הוספה לרשימת הראש בראש רק אם ה-UID תואם לשחקני המשחק הנוכחי
+                    if (userKey != null && (userKey.equals(p1Uid) || userKey.equals(p2Uid))) {
+                        currentMatchList.add(player);
+                    }
                 }
 
-                // מיון הרשימה בסדר יורד (מהניצחונות הגבוהים לנמוכים)
-                Collections.sort(playerList, new Comparator<PlayerItem>() {
-                    @Override
-                    public int compare(PlayerItem a, PlayerItem b) {
-                        return Long.compare(b.wins, a.wins);
-                    }
-                });
+                // 3. מיון שתי הרשימות בסדר יורד לפי כמות ניצחונות
+                Collections.sort(globalList, (a, b) -> Long.compare(b.wins, a.wins));
+                Collections.sort(currentMatchList, (a, b) -> Long.compare(b.wins, a.wins));
 
-                // עדכון התצוגה בטבלה
-                adapter.notifyDataSetChanged();
+                // 4. עדכון שני האדפטרים להצגת השינויים במסך
+                globalAdapter.notifyDataSetChanged();
+                currentMatchAdapter.notifyDataSetChanged();
             }
 
             @Override
